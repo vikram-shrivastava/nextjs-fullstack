@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 import { signInSchema } from '@/schemas/signInSchema';
+import { LockKeyhole } from 'lucide-react';
 
 export default function SignInForm() {
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function SignInForm() {
   });
 
   const { toast } = useToast();
+  
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
       redirect: false,
@@ -56,56 +58,78 @@ export default function SignInForm() {
     if (result?.url) {
       toast({
         title: 'Login successful',
-        description: "login success"
+        description: "Welcome back!",
       });
       router.replace('/');
     }
   };
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-slate-950 relative overflow-hidden">
+        {/* Background Decorative Elements */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        
+        <div className="w-full max-w-md p-8 space-y-8 bg-slate-900/50 backdrop-blur-md rounded-2xl border border-slate-800 shadow-2xl relative z-10">
         <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Welcome Back to True Feedback
-          </h1>
-          <p className="mb-4">Sign in to continue your secret conversations</p>
+            <div className="mx-auto w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center mb-4">
+                <LockKeyhole className="w-6 h-6 text-indigo-400" />
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
+            Welcome Back
+            </h1>
+            <p className="text-slate-400 text-sm">
+                Sign in to continue your anonymous adventures
+            </p>
         </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
-              name="identifier"
-              control={form.control}
-              render={({ field }) => (
+                name="identifier"
+                control={form.control}
+                render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email/Username</FormLabel>
-                  <Input {...field} placeholder='email/username'/>
-                  <FormMessage />
+                    <FormLabel className="text-slate-300">Email or Username</FormLabel>
+                    <Input 
+                        {...field} 
+                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 focus-visible:ring-indigo-500"
+                        placeholder="Enter your identifier"
+                    />
+                    <FormMessage />
                 </FormItem>
-              )}
+                )}
             />
             <FormField
-              name="password"
-              control={form.control}
-              render={({ field }) => (
+                name="password"
+                control={form.control}
+                render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" placeholder='password' {...field} />
-                  <FormMessage />
+                    <FormLabel className="text-slate-300">Password</FormLabel>
+                    <Input 
+                        type="password" 
+                        {...field}
+                        className="bg-slate-950 border-slate-800 text-white placeholder:text-slate-500 focus-visible:ring-indigo-500" 
+                        placeholder="••••••••"
+                    />
+                    <FormMessage />
                 </FormItem>
-              )}
+                )}
             />
-            <Button className='w-full' type="submit">Sign In</Button>
-          </form>
+            <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20" type="submit">
+                Sign In
+            </Button>
+            </form>
         </Form>
         <div className="text-center mt-4">
-          <p>
+            <p className="text-slate-400 text-sm">
             Not a member yet?{' '}
-            <Link href="/signup" className="text-blue-600 hover:text-blue-800">
-              Sign up
+            <Link href="/signup" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+                Sign up
             </Link>
-          </p>
+            </p>
         </div>
-      </div>
+        </div>
     </div>
   );
 }

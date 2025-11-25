@@ -1,13 +1,42 @@
-// Make sure to include these imports:
 import { GoogleGenerativeAI } from "@google/generative-ai";
-export async function GET(request:Request){
-    try {
-        const genAI = new GoogleGenerativeAI(process.env.GenAI_API_KEY!);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-        const prompt = "Create a one unique open-ended and engaging questions formatted as a single string which should not be repeated. These question is for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. The questions should be professional for a social messaging platform. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?. Ensure the question is intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment";
-        const result =await model.generateContent(prompt);
-        return new Response(result.response.text())
-    } catch (error) {
-        console.error("Error ocured in suggest messages",error)
+import { NextResponse } from "next/server";
+
+// CRITICAL: Forces the API to run dynamically on every request (prevents caching)
+export const dynamic = 'force-dynamic';
+
+export async function GET(request: Request) {
+  try {
+    const apiKey = process.env.GenAI_API_KEY;
+    
+    if (!apiKey) {
+      return NextResponse.json(
+        { message: "Gemini API Key is missing in environment variables" },
+        { status: 500 }
+      );
     }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const prompt = `Create a single, engaging, open-ended question for an anonymous messaging platform (like Qooh.me). 
+    The question should be suitable for a diverse audience, professional yet friendly. 
+    Avoid sensitive, political, or overly personal topics. 
+    Focus on hobbies, dreams, favorites, or hypothetical scenarios.
+    Output ONLY the question string. Do not include labels like "Question:" or quotes.
+    Example: What is a skill you have always wanted to learn?`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text().trim();
+
+    // Return a JSON object so the frontend can parse "response.data.message"
+    return NextResponse.json({ message: text }, { status: 200 });
+
+  } catch (error) {
+    console.error("Error generating suggestion:", error);
+    return NextResponse.json(
+      { message: "Failed to generate suggestion. Please try again." },
+      { status: 500 }
+    );
+  }
 }
