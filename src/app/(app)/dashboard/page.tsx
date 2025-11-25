@@ -14,7 +14,7 @@ import { User } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import MessageCards from '@/components/MessageCards'; // Keeping your original card component
+import MessageCards from '@/components/MessageCards';
 
 // --- Sentiment Analysis Helper (Client Side Simulation) ---
 type Sentiment = 'positive' | 'negative' | 'neutral';
@@ -167,7 +167,8 @@ function UserDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Dashboard</h1>
-            <p className="text-slate-400 mt-1">Welcome back, {username}. Here's your feedback overview.</p>
+            {/* FIXED: Replaced ' with &apos; */}
+            <p className="text-slate-400 mt-1">Welcome back, {username}. Here&apos;s your feedback overview.</p>
           </div>
           
           <div className="flex items-center gap-3 bg-slate-900/50 p-2 rounded-xl border border-slate-800">
@@ -272,7 +273,6 @@ function UserDashboard() {
                           ${message.sentiment === 'positive' ? 'bg-emerald-500' : 
                             message.sentiment === 'negative' ? 'bg-rose-500' : 'bg-slate-600'}`} 
                        />
-                       {/* Using your existing component, but wrapping it to fit the theme if needed */}
                        <div className="pl-1 h-full">
                            <MessageCards
                              message={{ ...message, _id: String(message._id) }}

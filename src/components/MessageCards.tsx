@@ -64,7 +64,7 @@ export default function MessageCard({ message, onMessageDelete }: MessageCardPro
       <CardHeader className="relative z-10 p-5 pb-2">
         <div className="flex justify-between items-start gap-4">
           <CardTitle className="text-lg font-medium text-slate-100 leading-relaxed break-words">
-            "{message.content}"
+            &quot;{message.content}&quot;
           </CardTitle>
           
           <AlertDialog>

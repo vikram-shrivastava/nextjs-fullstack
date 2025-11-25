@@ -150,7 +150,7 @@ export default function App() {
                  </div>
                  <div>
                    <h3 className="text-lg font-semibold text-white">Total Anonymity</h3>
-                   <p className="text-slate-400 mt-1">We don't track IP addresses or user agents. Your users can speak their minds freely.</p>
+                   <p className="text-slate-400 mt-1">We don&apos;t track IP addresses or user agents. Your users can speak their minds freely.</p>
                  </div>
                </div>
 
