@@ -195,7 +195,7 @@ export default function App() {
                       </div>
                     </div>
                     <p className="text-slate-300 leading-relaxed pl-1">
-                      "{messages[activeIndex].content}"
+                      &quot;{messages[activeIndex].content}&quot;
                     </p>
                   </div>
 
